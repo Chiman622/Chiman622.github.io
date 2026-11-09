@@ -388,12 +388,46 @@ td{
 
 
 <script>
+const LANG = {
 
+    zh:{
+        title:"🏆 比賽資訊看板",
+        subtitle:"32 隊伍 • 4 分組 • 8 輪賽事",
+        eventA:"🏃 項目 A",
+        eventB:"🎯 項目 B",
+        group:"分組",
+        current:"現正進行",
+        next:"下一隊",
+        announcement:"公告",
+        updated:"最後更新時間：",
+        preparation:"準備中",
+        inprogress:"進行中",
+        finished:"已完成",
+        break:"休息中"
+    },
+
+    en:{
+        title:"🏆 Competition Information Board",
+        subtitle:"32 Teams • 4 Groups • 8 Rounds",
+        eventA:"🏃 Event A",
+        eventB:"🎯 Event B",
+        group:"Group",
+        current:"Current",
+        next:"Next",
+        announcement:"Announcement",
+        updated:"Last Updated:",
+        preparation:"Preparation",
+        inprogress:"In Progress",
+        finished:"Finished",
+        break:"Break"
+    }
+
+};
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzRhRu3zzk7BIcMDV3k0d0BPWXMdoi7Rz2TARDNqlrW-jxVIQt_7iGaoPus0As-eJ9K/exec";
 
 const TOTAL_ROUNDS = 8;
-
+applyLanguage();
 function getStatusClass(status){
 
     switch((status || "").toLowerCase()){
@@ -416,7 +450,30 @@ function getStatusClass(status){
     }
 
 }
+function translateStatus(status){
 
+    if(currentLanguage === "en")
+        return status;
+
+    switch(status){
+
+        case "Preparation":
+            return "準備中";
+
+        case "In Progress":
+            return "進行中";
+
+        case "Finished":
+            return "已完成";
+
+        case "Break":
+            return "休息中";
+
+        default:
+            return status;
+    }
+
+}
 function renderEvent(
     roundId,
     statusId,
@@ -475,7 +532,34 @@ function renderEvent(
         html;
 
 }
+let currentLanguage =
+    localStorage.getItem("language")
+    || "zh";
 
+function setLanguage(lang){
+
+    currentLanguage = lang;
+
+    localStorage.setItem(
+        "language",
+        lang
+    );
+
+    applyLanguage();
+
+}
+
+function applyLanguage(){
+
+    const t = LANG[currentLanguage];
+
+    document.getElementById("title")
+        .innerHTML = t.title;
+
+    document.getElementById("subtitle")
+        .innerHTML = t.subtitle;
+
+}
 async function loadData(){
 
     try{

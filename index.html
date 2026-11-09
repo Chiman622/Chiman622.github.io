@@ -1,3 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Competition Information Board</title>
+
+<style>
+
+:root{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --border:#334155;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+
+    --green:#22c55e;
+    --yellow:#f59e0b;
+    --red:#ef4444;
+    --blue:#2563eb;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    max-width:1800px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:clamp(2rem,4vw,4rem);
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:var(--muted);
+}
+
+.events-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:24px;
+}
+
+.event-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.event-title{
+    font-size:2rem;
+    font-weight:bold;
+}
+
+.round{
+    font-size:1.1rem;
+    font-weight:600;
+}
+
+.status{
+    display:inline-block;
+    margin-top:8px;
+    padding:8px 14px;
+    border-radius:999px;
+    font-weight:bold;
+}
+
+.status-progress{
+    background:var(--green);
+    color:white;
+}
+
+.status-preparation{
+    background:var(--yellow);
+    color:black;
+}
+
+.status-break{
+    background:#64748b;
+    color:white;
+}
+
+.status-finished{
+    background:var(--red);
+    color:white;
+}
+
+.progress-bar{
+    margin-top:18px;
+    height:12px;
+    background:#475569;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    transition:.3s ease;
+}
+
+.progress-a{
+    background:var(--green);
+}
+
+.progress-b{
+    background:#38bdf8;
+}
+
+.percent{
+    text-align:right;
+    margin-top:8px;
+    color:var(--muted);
+}
+
+.section-title{
+    margin-top:20px;
+    margin-bottom:10px;
+    color:#60a5fa;
+    font-weight:600;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#334155;
+    padding:12px;
+}
+
+td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #334155;
+}
+
+.current{
+    font-weight:bold;
+}
+
+.next{
+    color:#fbbf24;
+    font-weight:bold;
+}
+
+.announcement{
+    margin-top:20px;
+    background:var(--blue);
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+    font-size:1.05rem;
+}
+
+.footer{
+    color:var(--muted);
+    margin-top:20px;
+    text-align:center;
+}
+
+.loading{
+    color:var(--muted);
+}
+
+@media(max-width:900px){
+
+    .events-grid{
+        grid-template-columns:1fr;
+    }
+
+    .event-title{
+        font-size:1.5rem;
+    }
+
+    th,
+    td{
+        padding:10px;
+        font-size:0.95rem;
+    }
+
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>🏆 Competition Information Board</h1>
+        <div class="subtitle">
+            32 Teams • 4 Groups • 8 Rounds
+        </div>
+    </div>
+
+    <div class="events-grid">
+
+        <!-- EVENT A -->
+
+        <div class="card">
+
+            <div class="event-header">
+
+                <div class="event-title">
+                    🏃 Event A
+                </div>
+
+                <div>
+
+                    <div id="eventA-round" class="round">
+                        Round 0 / 8
+                    </div>
+
+                    <div id="eventA-status"
+                         class="status status-preparation">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="progress-bar">
+                <div id="eventA-progress"
+                     class="progress-fill progress-a"
+                     style="width:0%">
+                </div>
+            </div>
+
+            <div id="eventA-percent"
+                 class="percent">
+                 0%
+            </div>
+
+            <div class="section-title">
+                Current & Upcoming Teams
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Current</th>
+                        <th>Next</th>
+                    </tr>
+                </thead>
+
+                <tbody id="eventA-table">
+                    <tr>
+                        <td colspan="3" class="loading">
+                            Loading...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- EVENT B -->
+
+        <div class="card">
+
+            <div class="event-header">
+
+                <div class="event-title">
+                    🎯 Event B
+                </div>
+
+                <div>
+
+                    <div id="eventB-round" class="round">
+                        Round 0 / 8
+                    </div>
+
+                    <div id="eventB-status"
+                         class="status status-preparation">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="progress-bar">
+                <div id="eventB-progress"
+                     class="progress-fill progress-b"
+                     style="width:0%">
+                </div>
+            </div>
+
+            <div id="eventB-percent"
+                 class="percent">
+                 0%
+            </div>
+
+            <div class="section-title">
+                Current & Upcoming Teams
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Current</th>
+                        <th>Next</th>
+                    </tr>
+                </thead>
+
+                <tbody id="eventB-table">
+                    <tr>
+                        <td colspan="3" class="loading">
+                            Loading...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div id="announcement"
+         class="announcement">
+
+         📢 Loading announcement...
+
+    </div>
+
+    <div id="lastUpdated"
+         class="footer">
+
+         Waiting for updates...
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzRhRu3zzk7BIcMDV3k0d0BPWXMdoi7Rz2TARDNqlrW-jxVIQt_7iGaoPus0As-eJ9K/exec";
+
+const TOTAL_ROUNDS = 8;
+
+function getStatusClass(status){
+
+    switch((status || "").toLowerCase()){
+
+        case "in progress":
+            return "status-progress";
+
+        case "preparation":
+            return "status-preparation";
+
+        case "break":
+            return "status-break";
+
+        case "finished":
+            return "status-finished";
+
+        default:
+            return "status-preparation";
+
+    }
+
+}
+
+function renderEvent(
+    roundId,
+    statusId,
+    progressId,
+    percentId,
+    tableId,
+    event
+){
+
+    const round =
+        Number(event.round || 0);
+
+    const percent =
+        Math.min(
+            100,
+            (round / TOTAL_ROUNDS) * 100
+        );
+
+    document.getElementById(roundId).innerHTML =
+        `Round ${round} / ${TOTAL_ROUNDS}`;
+
+    const statusElement =
+        document.getElementById(statusId);
+
+    statusElement.innerHTML =
+        event.status || "Unknown";
+
+    statusElement.className =
+        `status ${getStatusClass(event.status)}`;
+
+    document.getElementById(progressId).style.width =
+        `${percent}%`;
+
+    document.getElementById(percentId).innerHTML =
+        `${percent.toFixed(1)}% Complete`;
+
+    let html = "";
+
+    if(event.teams){
+
+        event.teams.forEach(team => {
+
+            html += `
+            <tr>
+                <td>${team.group}</td>
+                <td class="current">${team.current}</td>
+                <td class="next">${team.next}</td>
+            </tr>
+            `;
+
+        });
+
+    }
 
     document.getElementById(tableId).innerHTML =
         html;

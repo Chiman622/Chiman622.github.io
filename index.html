@@ -24,10 +24,136 @@ h1{margin:0}.lang button{padding:8px 12px;margin-left:4px}.events{display:grid;g
 const API_URL='https://script.google.com/macros/s/AKfycbzUGbmYG4HSn1s0gojnYJ__LJKvHC8m6NTV21eXqhp01JmsqHRmKf-47oJWFl5-oo9b/exec'; const TOTAL_ROUNDS=8;
 let currentLanguage=localStorage.getItem('language')||'zh';
 const TXT={zh:{group:'組別',current:'現正進行',next:'下一個分區',progress:'完成進度',updated:'最後更新時間：'},en:{group:'Group',current:'Current',next:'Next Division',progress:'Progress',updated:'Last Updated: '}};
+  const GROUP_NAMES = {
+
+    zh: {
+
+        A: "謹慎盃 (A組)",
+        B: "公義盃 (B組)",
+        C: "自制盃 (C組)",
+        D: "毅力盃 (D組)"
+
+    },
+
+    en: {
+
+        A: "Prudence Cup (Group A)",
+        B: "Justice Cup (Group B)",
+        C: "Self-discipline Cup (Group C)",
+        D: "Perseverance Cup (Group D)"
+
+    }
+
+};
 function setLanguage(l){currentLanguage=l;localStorage.setItem('language',l);loadData();}
 function tStatus(s){if(currentLanguage==='en')return s; return {'Preparation':'準備中','Ready':'已就緒','In Progress':'進行中','Break':'休息中','Suspended':'暫停','Finished':'已完成'}[s]||s;}
 function statusColor(s){return {'Preparation':'#f59e0b','Ready':'#2563eb','In Progress':'#dc2626','Break':'#6b7280','Suspended':'#7c3aed','Finished':'#16a34a'}[s]||'#6b7280';}
-function renderDivisions(id, divisions){let html='';(divisions||[]).forEach(d=>{let c=currentLanguage==='zh'?(d.currentDivisionZh||d.currentCode):(d.currentDivisionEn||d.currentCode);let n=currentLanguage==='zh'?(d.nextDivisionZh||d.nextCode):(d.nextDivisionEn||d.nextCode);html+=`<div class="division-card"><div class="group">${TXT[currentLanguage].group} ${d.group}</div><div class="current-name">${c}<div class="division-code">(${d.currentCode})</div></div><div class="arrow">➜</div><div class="next-name">${n}<div class="division-code">(${d.nextCode})</div></div></div>`});document.getElementById(id).innerHTML=html;}
+function renderDivisions(
+    id,
+    divisions
+){
+
+    let html = "";
+
+    (divisions || []).forEach(d => {
+
+        const currentName =
+            currentLanguage === "zh"
+            ? (
+                d.currentDivisionZh ||
+                d.currentCode
+            )
+            : (
+                d.currentDivisionEn ||
+                d.currentCode
+            );
+
+        const nextName =
+            currentLanguage === "zh"
+            ? (
+                d.nextDivisionZh ||
+                d.nextCode
+            )
+            : (
+                d.nextDivisionEn ||
+                d.nextCode
+            );
+
+        const groupName =
+            GROUP_NAMES[
+                currentLanguage
+            ][d.group];
+
+        html += `
+
+        <div class="division-card">
+
+            <div class="group">
+
+                ${groupName}
+
+            </div>
+
+            <div class="section-label">
+
+                ${
+                    currentLanguage === "zh"
+                    ? "本輪"
+                    : "Current"
+                }
+
+            </div>
+
+            <div class="current-name">
+
+                ${currentName}
+
+            </div>
+
+            <div class="division-code">
+
+                (${d.currentCode})
+
+            </div>
+
+            <div class="arrow">
+
+                ➜
+
+            </div>
+
+            <div class="section-label">
+
+                ${
+                    currentLanguage === "zh"
+                    ? "下一輪"
+                    : "Next Round"
+                }
+
+            </div>
+
+            <div class="next-name">
+
+                ${nextName}
+
+            </div>
+
+            <div class="division-code">
+
+                (${d.nextCode})
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    document.getElementById(id)
+        .innerHTML = html;
+
+}
 function renderEvent(prefix,e){document.getElementById(prefix+'-title').innerText=currentLanguage==='zh'?e.nameZh:e.nameEn;document.getElementById(prefix+'-round').innerText=currentLanguage==='zh'?`第 ${e.round} 輪 / 共 ${TOTAL_ROUNDS} 輪`:`Round ${e.round}/${TOTAL_ROUNDS}`;let st=document.getElementById(prefix+'-status');st.innerText=tStatus(e.status);st.style.background=statusColor(e.status);let pct=((e.round||0)/TOTAL_ROUNDS)*100;document.getElementById(prefix+'-progress').style.width=pct+'%';document.getElementById(prefix+'-progress').style.background=statusColor(e.status);document.getElementById(prefix+'-percent').innerText=TXT[currentLanguage].progress+' '+pct.toFixed(1)+'%';document.getElementById(prefix+'-announcement').innerText='📢 '+(currentLanguage==='zh'?e.announcementZh:e.announcementEn);renderDivisions(prefix+'-divisions',e.divisions);}
 async function loadData(){try{const r=await fetch(API_URL+'?t='+Date.now());const d=await r.json();competitionTitle.innerText=currentLanguage==='zh'?d.competitionNameZh:d.competitionNameEn;masterAnnouncement.innerText='📢 '+(currentLanguage==='zh'?d.masterAnnouncementZh:d.masterAnnouncementEn);renderEvent('eventA',d.eventA);renderEvent('eventB',d.eventB);lastUpdated.innerText=TXT[currentLanguage].updated+new Date().toLocaleString();}catch(err){lastUpdated.innerText='Connection Error';}}
 loadData();setInterval(loadData,5000);

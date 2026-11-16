@@ -17,9 +17,22 @@ h1{margin:0}.lang button{padding:8px 12px;margin-left:4px}.events{display:grid;g
 .group{color:#64748b;font-size:.9rem;margin-bottom:8px}.current-name{font-weight:700}.next-name{font-weight:700;color:#2563eb}.division-code{color:#64748b;font-size:.85rem}.arrow{text-align:center;color:#2563eb;margin:8px 0}
 .event-announcement{background:#eef4ff;border-left:5px solid #2563eb;padding:12px;border-radius:10px;margin-top:15px}
 .master-announcement{background:#2563eb;color:white;padding:18px;border-radius:16px;margin-top:20px;font-weight:700}.footer{text-align:center;color:#64748b;margin-top:15px}
+  .section-label{
+
+    font-size:.85rem;
+
+    color:#64748b;
+
+    margin-top:8px;
+
+    margin-bottom:4px;
+
+    font-weight:600;
+
+}
 @media(max-width:900px){.events{grid-template-columns:1fr}.division-grid{grid-template-columns:1fr}}
 </style>
-</head><body><div class="container"><div class="header"><h1 id="competitionTitle">Loading...</h1><div class="lang"><button onclick="setLanguage('zh')">中文</button><button onclick="setLanguage('en')">EN</button></div></div><div class="events"><div class="card"><h2 id="eventA-title"></h2><div id="eventA-round"></div><div id="eventA-status" class="status"></div><div class="progress"><div id="eventA-progress" class="fill"></div></div><div id="eventA-percent"></div><div id="eventA-divisions" class="division-grid"></div><div id="eventA-announcement" class="event-announcement"></div></div><div class="card"><h2 id="eventB-title"></h2><div id="eventB-round"></div><div id="eventB-status" class="status"></div><div class="progress"><div id="eventB-progress" class="fill"></div></div><div id="eventB-percent"></div><div id="eventB-divisions" class="division-grid"></div><div id="eventB-announcement" class="event-announcement"></div></div></div><div id="masterAnnouncement" class="master-announcement"></div><div id="lastUpdated" class="footer"></div></div>
+</head><body><div class="container"><div class="header"><h1 id="competitionTitle">Loading...</h1><div class="lang"><button onclick="setLanguage('zh')">中文</button><button onclick="setLanguage('en')">EN</button></div></div><div id="masterAnnouncement" class="master-announcement"></div><div class="events"><div class="card"><h2 id="eventA-title"></h2><div id="eventA-round"></div><div id="eventA-status" class="status"></div><div class="progress"><div id="eventA-progress" class="fill"></div></div><div id="eventA-percent"></div><div id="eventA-divisions" class="division-grid"></div><div id="eventA-announcement" class="event-announcement"></div></div><div class="card"><h2 id="eventB-title"></h2><div id="eventB-round"></div><div id="eventB-status" class="status"></div><div class="progress"><div id="eventB-progress" class="fill"></div></div><div id="eventB-percent"></div><div id="eventB-divisions" class="division-grid"></div><div id="eventB-announcement" class="event-announcement"></div></div></div><div id="lastUpdated" class="footer"></div></div>
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbzUGbmYG4HSn1s0gojnYJ__LJKvHC8m6NTV21eXqhp01JmsqHRmKf-47oJWFl5-oo9b/exec'; const TOTAL_ROUNDS=8;
 let currentLanguage=localStorage.getItem('language')||'zh';

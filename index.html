@@ -219,27 +219,43 @@
 
     }
 
-    .event-announcement {
+.event-announcement{
 
-  margin-top:12px;
+  margin-top:10px;
 
   background:#eef4ff;
 
   border-left:4px solid #2563eb;
 
-  padding:12px;
-
   border-radius:10px;
+
+  padding:10px 12px;
 
   white-space:pre-line;
 
-  height:auto;
-
-  min-height:auto;
-
   display:block;
-    }
 
+  font-size:14px;
+
+  line-height:1.4;
+
+  overflow-wrap:break-word;
+
+.announcement-title{
+
+  font-weight:700;
+
+  margin-bottom:6px;
+
+}
+
+.announcement-content{
+
+  white-space:pre-line;
+
+  line-height:1.4;
+
+}
     .divisions {
 
       display: grid;
@@ -928,42 +944,37 @@ function renderEvents(events){
 
         </div>
 
-        <div
-          class="event-announcement">
+<div class="event-announcement">
 
-          <b>
+    <div class="announcement-title">
 
-          📢
+      📢 ${
+          TXT[
+            currentLanguage
+          ].eventAnnouncement
+      }
 
-          ${
-            TXT[
-              currentLanguage
-            ].eventAnnouncement
-          }
+    </div>
 
-          </b>
+    <div class="announcement-content">
 
-          <br><br>
+      ${
+        currentLanguage === 'zh'
 
-          ${
-            currentLanguage === 'zh'
+        ? (
+            event.announcementZh
+            || '-'
+          )
 
-            ?
+        : (
+            event.announcementEn
+            || '-'
+          )
+      }
 
-            (
-              event.announcementZh
-              || '-'
-            )
+    </div>
 
-            :
-
-            (
-              event.announcementEn
-              || '-'
-            )
-          }
-
-        </div>
+</div>
 
         ${renderDivisions(event)}
 

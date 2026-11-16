@@ -629,6 +629,7 @@ let currentLanguage =
 
 let boardData = null;
 
+let lastJson = '';
 const TXT = {
 
   zh:{
@@ -765,7 +766,18 @@ async function loadData(){
     const data =
       await res.json();
 
-    boardData = data;
+    const newJson =
+  JSON.stringify(data);
+
+if(newJson !== lastJson){
+
+  lastJson = newJson;
+
+  boardData = data;
+
+  render(data);
+
+}
 
     render(data);
 
@@ -1404,7 +1416,7 @@ loadData();
 
 setInterval(
   loadData,
-  5000
+  10000
 );
 
   </script>

@@ -348,7 +348,6 @@
 
     }
 
-
     .modal {
 
       display: none;
@@ -600,7 +599,7 @@
 
   <script>
     const API_URL =
-'https://script.google.com/macros/s/AKfycbw2HTOiRVQhZ5CThh4-5if5Vbn35QAT6AE_GK5cB5Q/dev';
+'https://script.google.com/macros/s/AKfycbxNJY5npTfvACo0ZtFmK2xFPwrc2L0EYH6am4R0TSWV0sQE1O0T3QnLlen3pIUGeOZD/exec';
 
 let currentLanguage =
     localStorage.getItem(
@@ -691,8 +690,7 @@ const TXT = {
 
   }
 
-};
-function setLang(lang){
+};function setLang(lang){
 
   currentLanguage = lang;
 
@@ -1086,4 +1084,315 @@ function renderDivisions(event){
 
           ↓
 
+        </div>        ${
+          division.isFinalRound
+
+          ?
+
+          `
+
+          <div class="section-label">
+
+            ${
+              TXT[
+                currentLanguage
+              ].next
+            }
+
+          </div>
+
+          <div class="next-name">
+
+            ${
+              TXT[
+                currentLanguage
+              ].finalRound
+            }
+
+          </div>
+
+          `
+
+          :
+
+          `
+
+          <div class="section-label">
+
+            ${
+              TXT[
+                currentLanguage
+              ].next
+            }
+
+          </div>
+
+          <div class="next-name">
+
+            ${nextName}
+
+          </div>
+
+          <div class="division-code">
+
+            (${division.nextCode})
+
+          </div>
+
+          `
+
+        }
+
+      </div>
+
+      `;
+
+    });
+
+  html += '</div>';
+
+  return html;
+
+}
+
+function showSchedule(
+  eventId,
+  group
+){
+
+  const event =
+    boardData.events.find(
+      e =>
+        e.eventId === eventId
+    );
+
+  if(!event) return;
+
+  const division =
+    event.divisions.find(
+      d =>
+        d.group === group
+    );
+
+  if(!division) return;
+
+  document
+    .getElementById(
+      'modalTitle'
+    )
+    .innerText =
+
+      currentLanguage === 'zh'
+
+      ?
+
+      division.groupNameZh
+
+      :
+
+      division.groupNameEn;
+
+  let html = '';
+
+  const announcement =
+
+    currentLanguage === 'zh'
+
+    ?
+
+    division.groupAnnouncementZh
+
+    :
+
+    division.groupAnnouncementEn;
+
+  if(announcement){
+
+    html += `
+
+      <div
+        class="schedule-announcement">
+
+        <b>
+
+        📢
+
+        ${
+          TXT[
+            currentLanguage
+          ].groupAnnouncement
+        }
+
+        </b>
+
+        <br><br>
+
+        ${announcement}
+
+      </div>
+
+    `;
+
+  }
+
+  html +=
+    `<div class="schedule-table">`;
+
+  division.rounds
+    .forEach(r=>{
+
+      let cls = '';
+
+      let badge = '';
+
+      if(
+        r.round ===
+        division.currentRoundNumber
+      ){
+
+        cls='current';
+
+        badge =
+
+        `<span
+           class="
+           badge
+           badge-current">
+
+         ${
+          TXT[
+            currentLanguage
+          ].currentBadge
+         }
+
+         </span>`;
+
+      }
+
+      if(
+        r.round ===
+        division.nextRoundNumber
+      ){
+
+        cls='next';
+
+        badge =
+
+        `<span
+           class="
+           badge
+           badge-next">
+
+         ${
+          TXT[
+            currentLanguage
+          ].nextBadge
+         }
+
+         </span>`;
+
+      }
+
+      html += `
+
+        <div
+         class="
+         schedule-row
+         ${cls}">
+
+          <div
+           class="round-label">
+
+            R${r.round}
+
+            ${badge}
+
+          </div>
+
+          <div>
+
+            ${
+              currentLanguage === 'zh'
+
+              ?
+
+              r.nameZh
+
+              :
+
+              r.nameEn
+            }
+
+          </div>
+
+          <div
+            class="division-code">
+
+            (${r.code})
+
+          </div>
+
         </div>
+
+      `;
+
+    });
+
+  html += '</div>';
+
+  document
+    .getElementById(
+      'modalBody'
+    )
+    .innerHTML = html;
+
+  document
+    .getElementById(
+      'scheduleModal'
+    )
+    .classList.add(
+      'show'
+    );
+
+}
+
+function closeModal(){
+
+  document
+    .getElementById(
+      'scheduleModal'
+    )
+    .classList.remove(
+      'show'
+    );
+
+}
+
+window.onclick =
+function(e){
+
+  if(
+    e.target ===
+    document.getElementById(
+      'scheduleModal'
+    )
+  ){
+
+    closeModal();
+
+  }
+
+};
+
+loadData();
+
+setInterval(
+  loadData,
+  5000
+);
+
+  </script>
+
+</body>
+
+</html>

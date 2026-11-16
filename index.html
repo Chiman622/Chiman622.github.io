@@ -759,6 +759,35 @@ function getStatusColor(status){
 
 }
 
+    function getStatusText(status){
+
+  if(currentLanguage === 'zh'){
+
+    switch(status){
+
+      case 'Preparation':
+        return '準備中';
+
+      case 'Ready':
+        return '就緒';
+
+      case 'In Progress':
+        return '進行中';
+
+      case 'Finished':
+        return '已完成';
+
+      default:
+        return status;
+
+    }
+
+  }
+
+  return status;
+
+}
+
 async function loadData(){
 
   try{
@@ -918,16 +947,16 @@ function renderEvents(events){
 
         </div>
 
-        <div
-          class="status"
-          style="
-          background:
-          ${getStatusColor(event.status)}
-          ">
+<div
+  class="status"
+  style="
+  background:
+  ${getStatusColor(event.status)}
+  ">
 
-          ${event.status}
+  ${getStatusText(event.status)}
 
-        </div>
+</div>
 
         <div class="progress">
 

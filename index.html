@@ -164,7 +164,57 @@
       margin-bottom: 16px;
 
     }
+.event-summary{
 
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+
+  gap:12px;
+
+  margin-bottom:20px;
+
+}
+
+.summary-card{
+
+  background:white;
+
+  border:1px solid var(--border);
+
+  border-radius:12px;
+
+  padding:12px;
+
+  box-shadow:
+    0 1px 4px rgba(0,0,0,.06);
+
+}
+
+.summary-title{
+
+  font-weight:700;
+
+  margin-bottom:6px;
+
+}
+
+.summary-status{
+
+  font-size:14px;
+
+  margin-bottom:4px;
+
+}
+
+.summary-round{
+
+  color:var(--muted);
+
+  font-size:13px;
+
+}
     .round-info {
 
       font-weight: 700;
@@ -587,7 +637,10 @@
     <div id="masterAnnouncement" class="master-announcement">
 
     </div>
-
+<div
+  id="eventSummary"
+  class="event-summary">
+</div>
     <div id="eventsContainer" class="events-container">
 
     </div>
@@ -834,7 +887,53 @@ if(newJson !== lastJson){
   }
 
 }
+function renderSummary(events){
 
+  let html = '';
+
+  events.forEach(event=>{
+
+    html += `
+
+      <div class="summary-card">
+
+        <div class="summary-title">
+
+          ${
+            currentLanguage === 'zh'
+              ? event.nameZh
+              : event.nameEn
+          }
+
+        </div>
+
+        <div class="summary-status">
+
+          ${getStatusText(event.status)}
+
+        </div>
+
+        <div class="summary-round">
+
+          R${event.currentRound}
+          /
+          R${event.totalRounds}
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+  document
+    .getElementById(
+      'eventSummary'
+    )
+    .innerHTML = html;
+
+}
 function render(data){
 
   document
@@ -865,9 +964,13 @@ function render(data){
       : data.masterAnnouncementEn
     );
 
-  renderEvents(
-    data.events
-  );
+renderSummary(
+  data.events
+);
+
+renderEvents(
+  data.events
+);
 
   document
     .getElementById(
